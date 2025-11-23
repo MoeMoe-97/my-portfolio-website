@@ -31,7 +31,7 @@ jobs:
       run: npm ci # Use 'ci' for clean install in CI environments
 
     - name: Build Project (Vite/React)
-      # This command generates the static files in the 'build' folder (as configured in vite.config.ts)
+      # This command now uses the fixed 'npm run build' script from package.json (which uses npx tsc)
       run: npm run build
 
     - name: Setup Pages
@@ -40,8 +40,8 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        # >>> UPDATED: Uploads the 'build' directory to match vite.config.ts outDir.
-        path: './build'
+        # CORRECTED: Standard Vite output directory is 'dist', not 'build'.
+        path: './dist'
 
     - name: Deploy to GitHub Pages
       id: deployment
