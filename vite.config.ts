@@ -1,9 +1,11 @@
-
-  import { defineConfig } from 'vite';
+import { defineConfig } from 'vite';
   import react from '@vitejs/plugin-react-swc';
   import path from 'path';
 
   export default defineConfig({
+    // >>> ADDED: Sets the base path for assets to work correctly on GitHub Pages.
+    // Replace 'my-portfolio-website' with your actual repository name if it differs.
+    base: "/my-portfolio-website/",
     plugins: [react()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
