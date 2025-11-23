@@ -1,12 +1,10 @@
-# Build and Deploy Workflow for Vite/React/Node.js
 name: Build and Deploy Portfolio
 
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # Allows manual triggering
+  workflow_dispatch:
 
-# Sets permissions needed for GitHub Pages deployment
 permissions:
   contents: read
   pages: write
@@ -14,35 +12,36 @@ permissions:
 
 jobs:
   build:
-    # Set the name of the runner
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js 20.x
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        cache: 'npm'
+      - name: Set up Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-    - name: Install Dependencies
-      run: npm ci # Use 'ci' for clean install in CI environments
+      - name: Install Dependencies
+        run: npm ci
 
-    - name: Build Project (Vite/React)
-      # This command now uses the fixed 'npm run build' script from package.json (which uses npx tsc)
-      run: npm run build
+      - name: Build Project
+        run: npm run build
 
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
-    - name: Upload Artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        # CORRECTED: Standard Vite output directory is 'dist', not 'build'.
-        path: './dist'
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist   # <-- correct for Vite
 
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
